@@ -31,3 +31,7 @@
 
 es:
   hello: "Hola Mundo!"
+  note:
+    attributes:
+      content:
+        review_word_limit: "El contenido de la reseña no puede exceder %{max_words} palabras"

@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  note:
+    attributes:
+      content:
+        review_word_limit: "Review content cannot exceed %{max_words} words"
