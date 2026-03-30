@@ -21,7 +21,10 @@ Rails.application.routes.draw do
     resource :users do
       get :current
     end
+
+    resources :notes, only: %i[index show create]
   end
+
 
   get '/async_request/jobs/:id', to: 'async_request/jobs#show'
 
