@@ -1,6 +1,8 @@
 module Api
   module V1
     class NotesController < ApplicationController
+      before_action :authenticate_user!, only: [:index, :show]
+
       def index 
         paginated_notes = notes.page(params[:page]).per(params[:page_size])
         render json: paginated_notes, status: :ok, each_serializer: IndexNoteSerializer
