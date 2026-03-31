@@ -1,6 +1,8 @@
 module Api
   module V1
     class NotesController < ApplicationController
+      before_action :authenticate_user!, only: [:index, :show]
+
       def index 
         paginated_notes = notes.page(params[:page]).per(params[:page_size])
         render json: paginated_notes, status: :ok, each_serializer: IndexNoteSerializer
@@ -16,13 +18,13 @@ module Api
       private
 
       def notes
-        @notes = Note.includes(:utility)
+        @notes = current_user.notes.includes(:utility)
         @notes = @notes.where(note_type: params[:type]) if params[:type].present?
         @notes = @notes.order(created_at: params[:order].presence || :desc)
       end
 
       def note
-        @note ||= Note.find(params[:id])
+        @note ||= current_user.notes.find(params[:id])
       end
 
     end
