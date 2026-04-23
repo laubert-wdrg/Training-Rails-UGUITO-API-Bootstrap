@@ -33,10 +33,6 @@ class Note < ApplicationRecord
 
   private
 
-  def set_utility_from_user
-    self.utility = user.utility if utility.blank? && user.present?
-  end
-
   def content_word_limit
     return unless review? && content.present?
     classifier = utility.note_classifier
