@@ -30,12 +30,7 @@ class Note < ApplicationRecord
   end
 
   def content_length
-    word_count_value = word_count
-    thresholds = utility.content_length_thresholds
-
-    return 'short' if word_count_value <= thresholds[:short]
-    return 'medium' if word_count_value <= thresholds[:medium]
-    'long'
+    utility.note_classifier.classify_content_length(self)
   end
 
   private
@@ -46,14 +41,10 @@ class Note < ApplicationRecord
 
   def content_word_limit
     return unless review? && content.present?
+    classifier = utility.note_classifier
+    return unless classifier.exceeds_review_limit?(self)
 
-    word_count_value = word_count
-    max_words = utility.max_review_words
-
-    if word_count_value > max_words
-      errors.add(:content, I18n.t('note.attributes.content.review_word_limit', 
-                                  utility: utility.clean_name, 
-                                  max_words: max_words))
-    end
+    errors.add(:content, I18n.t('note.attributes.content.review_word_limit',
+                                max_words: classifier.max_review_words))
   end
 end

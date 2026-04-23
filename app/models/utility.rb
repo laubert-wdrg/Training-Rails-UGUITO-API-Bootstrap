@@ -73,13 +73,10 @@ class Utility < ApplicationRecord
     self.class.name.underscore.split('_').first
   end
 
-  def content_length_thresholds
+  def note_classifier
     raise NotImplementedError
   end
 
-  def max_review_words
-    raise NotImplementedError
-  end
 
   private
 
