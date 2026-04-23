@@ -13,9 +13,7 @@
 #
 class Note < ApplicationRecord
   belongs_to :user
-  belongs_to :utility
-
-  before_validation :set_utility_from_user
+  delegate :utility, to: :user
 
   enum type: { critique: 1, review: 2 }
 
