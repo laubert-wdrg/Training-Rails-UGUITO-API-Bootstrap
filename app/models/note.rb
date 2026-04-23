@@ -17,9 +17,7 @@ class Note < ApplicationRecord
 
   enum note_type: { critique: 1, review: 2 }
 
-  validates :note_type, presence: true
-  validates :title, presence: true
-  validates :content, presence: true
+  validates :title, :content, :note_type, presence: true
   validates :utility, presence: true
   validate :content_word_limit
 
