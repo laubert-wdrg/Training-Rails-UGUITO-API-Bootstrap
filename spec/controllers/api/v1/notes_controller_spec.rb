@@ -126,6 +126,18 @@ describe Api::V1::NotesController, type: :controller do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context 'when fetching a note from another utility' do
+        let(:other_utility) { create(:south_utility) }
+        let(:other_user) { create(:user, utility: other_utility) }
+        let(:other_note) { create(:note, user: other_user) }
+
+        before { get :show, params: { id: other_note.id } }
+
+        it 'responds with 404 status' do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     context 'when there is not a user logged in' do
