@@ -13,16 +13,27 @@
 #
 class Note < ApplicationRecord
   belongs_to :user
-  belongs_to :utility
+  belongs_to :utility, required: true
 
-  before_validation :set_utility_from_user
+  enum note_type: { critique: 1, review: 2 }
 
-  enum type: { critique: 1, review: 2 }
-
-  validates :type, presence: true
-  validates :title, presence: true
-  validates :content, presence: true
+  validates :title, :content, :note_type, presence: true
+  validates :utility, presence: true
   validate :content_word_limit
+
+  def user=(new_user)
+    super(new_user)
+    self.utility ||= new_user.utility if new_user&.utility.present?
+  end
+
+  def utility=(new_utility)
+    if new_utility.nil? && user&.utility.present?
+      super(user.utility)
+    else
+      super(new_utility)
+    end
+  end
+  
 
   def word_count
     return 0 if content.blank?
